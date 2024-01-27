@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Download = RdtClient.Data.Models.Data.Download;
 
 namespace RdtClient.Data.Data;
@@ -193,6 +193,22 @@ public class DownloadData
         await TorrentData.VoidCache();
     }
 
+    public async Task UpdateErrorInRange(Dictionary<Guid, string> ErrorIdRange)
+    {
+        foreach (var entry in ErrorIdRange)
+        {
+            var dbDownload = await _dataContext.Downloads.FirstOrDefaultAsync(m => m.DownloadId == entry.Key);
+            if (dbDownload == null)
+            {
+                continue;
+            }
+
+            dbDownload.Error = entry.Value;
+        }
+
+        await _dataContext.SaveChangesAsync();
+    }
+
     public async Task UpdateRetryCount(Guid downloadId, Int32 retryCount)
     {
         var dbDownload = await _dataContext.Downloads
@@ -210,17 +226,27 @@ public class DownloadData
         await TorrentData.VoidCache();
     }
 
-    public async Task UpdateRemoteId(Guid downloadId, String remoteId)
+    public async Task UpdateRemoteId(Guid downloadId, string remoteId)
     {
-        var dbDownload = await _dataContext.Downloads
-                                           .FirstOrDefaultAsync(m => m.DownloadId == downloadId);
-
-        if (dbDownload == null)
+        await UpdateRemoteIdRange(new Dictionary<Guid, string>
         {
-            return;
-        }
+            { downloadId, remoteId }
+        });
 
-        dbDownload.RemoteId = remoteId;
+    }
+
+    public async Task UpdateRemoteIdRange(Dictionary<Guid, string> remoteIdRange)
+    {
+        foreach (var entry in remoteIdRange)
+        {
+            var dbDownload = await _dataContext.Downloads.FirstOrDefaultAsync(m => m.DownloadId == entry.Key);
+            if (dbDownload == null)
+            {
+                continue;
+            }
+
+            dbDownload.RemoteId = entry.Value;
+        }
 
         await _dataContext.SaveChangesAsync();
     }

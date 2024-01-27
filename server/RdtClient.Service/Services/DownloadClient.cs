@@ -1,4 +1,4 @@
-﻿using RdtClient.Data.Models.Data;
+using RdtClient.Data.Models.Data;
 using RdtClient.Service.Helpers;
 using RdtClient.Service.Services.Downloaders;
 
@@ -28,6 +28,9 @@ public class DownloadClient
         _download = download;
         _torrent = torrent;
         _destinationPath = destinationPath;
+
+        Type = Settings.Get.DownloadClient.Client;
+
     }
 
     public async Task<String?> Start()
@@ -53,12 +56,10 @@ public class DownloadClient
 
             await FileHelper.Delete(filePath);
 
-            Type = Settings.Get.DownloadClient.Client;
 
-            Downloader = Settings.Get.DownloadClient.Client switch
+            Downloader = Type switch
             {
                 Data.Enums.DownloadClient.Internal => new InternalDownloader(_download.Link, filePath),
-                Data.Enums.DownloadClient.Bezzad => new BezzadDownloader(_download.Link, filePath),
                 Data.Enums.DownloadClient.Aria2c => new Aria2cDownloader(_download.RemoteId, _download.Link, filePath, downloadPath),
                 Data.Enums.DownloadClient.Symlink => new SymlinkDownloader(_download.Link, filePath),
                 _ => throw new Exception($"Unknown download client {Settings.Get.DownloadClient}")

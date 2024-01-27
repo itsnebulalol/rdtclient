@@ -1,4 +1,4 @@
-﻿using RdtClient.Data.Data;
+using RdtClient.Data.Data;
 using Download = RdtClient.Data.Models.Data.Download;
 
 namespace RdtClient.Service.Services;
@@ -72,6 +72,11 @@ public class Downloads
         await _downloadData.UpdateError(downloadId, error);
     }
 
+    public async Task UpdateErrorInRange(Dictionary<Guid, String> updateDict)
+    {
+        await _downloadData.UpdateErrorInRange(updateDict);
+    }
+
     public async Task UpdateRetryCount(Guid downloadId, Int32 retryCount)
     {
         await _downloadData.UpdateRetryCount(downloadId, retryCount);
@@ -80,6 +85,11 @@ public class Downloads
     public async Task UpdateRemoteId(Guid downloadId, String remoteId)
     {
         await _downloadData.UpdateRemoteId(downloadId, remoteId);
+    }
+
+    public async Task UpdateRemoteIdRange(Dictionary<Guid, String> updateDict)
+    {
+        await _downloadData.UpdateRemoteIdRange(updateDict);
     }
 
     public async Task DeleteForTorrent(Guid torrentId)
