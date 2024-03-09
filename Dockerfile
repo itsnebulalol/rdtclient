@@ -12,7 +12,7 @@ RUN apk add --no-cache git python3 py3-pip make g++
 
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone https://github.com/pukabyte/rdt-client.git . && \
+   git clone https://github.com/itsnebulalol/rdtclient.git . && \
    cd client && \
    echo "**** Building Code  ****" && \
    npm ci && \
@@ -32,7 +32,7 @@ WORKDIR /appserver
 
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone https://github.com/pukabyte/rdt-client.git . && \
+   git clone https://github.com/itsnebulalol/rdtclient.git . && \
    echo "**** Building Source Code for $TARGETPLATFORM on $BUILDPLATFORM ****" && \
    cd server && \
    dotnet restore --no-cache RdtClient.sln && dotnet publish --no-restore -c Release -o out ; 
