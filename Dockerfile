@@ -69,7 +69,7 @@ RUN \
     echo "**** Updating package information ****" && \
     apk update && \
     echo "**** Install pre-reqs ****" && \
-    apk add bash icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib && \
+    apk add bash icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib rclone && \
     echo "**** Installing dotnet ****" && \
     apk add aspnetcore6-runtime && \
     echo "**** Setting permissions ****" && \
